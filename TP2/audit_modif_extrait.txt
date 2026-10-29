@@ -1,0 +1,9 @@
+----
+type=PROCTITLE msg=audit(27/10/2026 09:40:39.314:378) : proctitle=useradd testaudit
+type=PATH msg=audit(27/10/2026 09:40:39.314:378) : item=4 name=/etc/passwd inode=526283 dev=fc:00 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=CREATE cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=PATH msg=audit(27/10/2026 09:40:39.314:378) : item=3 name=/etc/passwd inode=526045 dev=fc:00 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=DELETE cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=PATH msg=audit(27/10/2026 09:40:39.314:378) : item=2 name=/etc/passwd+ inode=526283 dev=fc:00 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=DELETE cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=PATH msg=audit(27/10/2026 09:40:39.314:378) : item=1 name=/etc/ inode=524290 dev=fc:00 mode=dir,755 ouid=root ogid=root rdev=00:00 nametype=PARENT cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=PATH msg=audit(27/10/2026 09:40:39.314:378) : item=0 name=/etc/ inode=524290 dev=fc:00 mode=dir,755 ouid=root ogid=root rdev=00:00 nametype=PARENT cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(27/10/2026 09:40:39.314:378) : cwd=/home/nina
+type=SYSCALL msg=audit(27/10/2026 09:40:39.314:378) : arch=x86_64 syscall=rename success=yes exit=0 a0=0x7ffff2b945c0 a1=0x5e37dfb42080 a2=0x7ffff2b94530 a3=0x100 items=5 ppid=3390 pid=3391 auid=alice uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts1 ses=3 comm=useradd exe=/usr/sbin/useradd subj=unconfined key=passwd_watch

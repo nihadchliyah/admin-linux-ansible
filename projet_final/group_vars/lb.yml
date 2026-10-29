@@ -1,0 +1,7 @@
+---
+# srv-tp : load balancer, supervision et bastion d'administration
+ssh_allowed_users: [alice]
+fail2ban_ignoreip: "127.0.0.1/8"
+firewall_tcp_ports: [22, 80, 443, 8404]
+firewall_extra_rules:
+  - "ip saddr {{ poste_admin_ip }} tcp dport { 3000, 9090 } accept"

@@ -1,0 +1,10 @@
+---
+- name: Recharger Prometheus
+  ansible.builtin.service:
+    name: prometheus
+    state: reloaded
+
+- name: Redemarrer Grafana
+  ansible.builtin.service:
+    name: grafana-server
+    state: restarted

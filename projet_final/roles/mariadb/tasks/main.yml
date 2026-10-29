@@ -1,0 +1,69 @@
+---
+- name: Installer MariaDB et PyMySQL
+  ansible.builtin.apt:
+    name: [mariadb-server, python3-pymysql]
+    state: present
+
+- name: Configurer la replication
+  ansible.builtin.template:
+    src: 60-replication.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/60-replication.cnf
+    mode: "0644"
+  notify: Redemarrer MariaDB
+
+- name: Demarrer et activer MariaDB
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: Appliquer les redemarrages en attente
+  ansible.builtin.meta: flush_handlers
+
+- name: Creer la base de l'application (maitre)
+  community.mysql.mysql_db:
+    name: boutique
+    state: present
+    login_unix_socket: "{{ mariadb_socket }}"
+  when: mariadb_role == 'master'
+
+- name: Creer l'utilisateur de l'application (maitre)
+  community.mysql.mysql_user:
+    name: appuser
+    host: localhost
+    password: "{{ mariadb_app_password }}"
+    priv: "boutique.*:ALL"
+    state: present
+    login_unix_socket: "{{ mariadb_socket }}"
+  no_log: true
+  when: mariadb_role == 'master'
+
+- name: Creer l'utilisateur de replication (maitre)
+  community.mysql.mysql_user:
+    name: repl
+    host: "{{ hostvars[mariadb_replica].ip_privee }}"
+    password: "{{ mariadb_repl_password }}"
+    priv: "*.*:REPLICATION SLAVE"
+    state: present
+    login_unix_socket: "{{ mariadb_socket }}"
+  no_log: true
+  when: mariadb_role == 'master'
+
+- name: Lire l'etat de la replication (esclave)
+  ansible.builtin.command: mariadb -N -e "SHOW SLAVE STATUS"
+  register: etat_replication
+  changed_when: false
+  when: mariadb_role == 'replica'
+
+- name: Configurer et demarrer la replication (esclave)
+  ansible.builtin.command: >-
+    mariadb -e "CHANGE MASTER TO
+    MASTER_HOST='{{ hostvars[mariadb_master].ip_privee }}',
+    MASTER_USER='repl',
+    MASTER_PASSWORD='{{ mariadb_repl_password }}',
+    MASTER_USE_GTID=slave_pos; START SLAVE;"
+  no_log: true
+  changed_when: true
+  when:
+    - mariadb_role == 'replica'
+    - etat_replication.stdout | length == 0

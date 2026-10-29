@@ -1,0 +1,3 @@
+# /etc/audit/rules.d/passwd.rules
+# Surveillance des acces a /etc/passwd - TP2
+-w /etc/passwd -p rwa -k passwd_watch

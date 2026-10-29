@@ -1,0 +1,7 @@
+# /etc/cron.d/backup_data
+# Sauvegarde quotidienne de /srv/data vers /backup - Auteur : Nihad
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# min heure jour mois jour_sem  utilisateur  commande
+0 2 * * *   root   /usr/local/bin/backup_data.sh

@@ -1,0 +1,19 @@
+---
+- name: Installer Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Deployer la page de test
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: "0644"
+
+- name: Demarrer et activer Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

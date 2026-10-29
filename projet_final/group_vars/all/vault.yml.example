@@ -1,0 +1,8 @@
+---
+# Modele du fichier de secrets.
+# 1. cp vault.yml.example vault.yml
+# 2. remplacer les valeurs ci-dessous
+# 3. ansible-vault encrypt group_vars/all/vault.yml
+# vault.yml n'est jamais publie (voir .gitignore).
+vault_mariadb_repl_password: "A_REMPLACER"
+vault_mariadb_app_password: "A_REMPLACER"

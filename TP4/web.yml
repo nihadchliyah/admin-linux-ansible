@@ -1,0 +1,30 @@
+---
+# Deploiement de Nginx avec page de test et pare-feu - TP4
+- name: Installer et configurer le serveur web
+  hosts: web
+  become: true
+
+  roles:
+    - firewall
+
+  tasks:
+    - name: Installer Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Deployer la page de test
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Demarrer et activer Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true

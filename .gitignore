@@ -1,0 +1,19 @@
+# Secrets : ne jamais publier
+vault.yml
+.vault_pass*
+*.vault
+id_rsa*
+id_ed25519*
+id_alice*
+*.pem
+*.key
+known_hosts
+
+# Fichiers temporaires Ansible et Python
+*.retry
+__pycache__/
+*.pyc
+
+# Archives
+*.zip
+*.tar.gz

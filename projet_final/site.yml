@@ -1,0 +1,24 @@
+---
+# Deploiement complet de l'infrastructure - Projet final
+- name: Socle commun et securite (tous les serveurs)
+  hosts: all
+  become: true
+  roles:
+    - common
+    - firewall
+    - ssh_hardening
+    - node_exporter
+
+- name: Cluster web et base de donnees
+  hosts: web
+  become: true
+  roles:
+    - webserver
+    - mariadb
+
+- name: Load balancer et supervision
+  hosts: lb
+  become: true
+  roles:
+    - haproxy
+    - monitoring

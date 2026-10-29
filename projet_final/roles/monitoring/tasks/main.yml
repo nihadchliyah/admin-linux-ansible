@@ -1,0 +1,85 @@
+---
+- name: Installer Prometheus
+  ansible.builtin.apt:
+    name: prometheus
+    state: present
+
+- name: Deployer les regles d'alerte
+  ansible.builtin.copy:
+    src: alertes.yml
+    dest: /etc/prometheus/alertes.yml
+    mode: "0644"
+    validate: promtool check rules %s
+  notify: Recharger Prometheus
+
+- name: Deployer la configuration Prometheus
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    mode: "0644"
+    validate: promtool check config %s
+  notify: Recharger Prometheus
+
+- name: Creer le dossier des cles APT
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Ajouter la cle du depot Grafana
+  ansible.builtin.shell: |
+    set -o pipefail
+    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
+  args:
+    executable: /bin/bash
+    creates: /etc/apt/keyrings/grafana.gpg
+
+- name: Ajouter le depot Grafana
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+    filename: grafana
+    state: present
+
+- name: Installer Grafana
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+
+- name: Provisionner la source de donnees Prometheus
+  ansible.builtin.copy:
+    src: grafana-datasource.yml
+    dest: /etc/grafana/provisioning/datasources/prometheus.yml
+    mode: "0644"
+  notify: Redemarrer Grafana
+
+- name: Provisionner le chargement des tableaux de bord
+  ansible.builtin.copy:
+    src: grafana-dashboards.yml
+    dest: /etc/grafana/provisioning/dashboards/tp5.yml
+    mode: "0644"
+  notify: Redemarrer Grafana
+
+- name: Creer le dossier des tableaux de bord
+  ansible.builtin.file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: "0755"
+
+- name: Deployer le tableau de bord
+  ansible.builtin.copy:
+    src: tp5-serveurs.json
+    dest: /var/lib/grafana/dashboards/tp5-serveurs.json
+    owner: grafana
+    group: grafana
+    mode: "0644"
+
+- name: Demarrer et activer Prometheus et Grafana
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - prometheus
+    - grafana-server

@@ -1,0 +1,30 @@
+#!/usr/sbin/nft -f
+# Fichier gere par Ansible (role firewall) - ne pas modifier a la main
+
+table inet filter
+flush table inet filter
+
+table inet filter {
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        ct state established,related accept
+        ct state invalid drop
+        iif "lo" accept
+        ip protocol icmp accept
+        ip6 nexthdr ipv6-icmp accept
+
+        tcp dport { {{ firewall_tcp_ports | join(', ') }} } accept
+{% for rule in firewall_extra_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+    }
+
+    chain output {
+        type filter hook output priority filter; policy accept;
+    }
+}

@@ -1,0 +1,5 @@
+----
+type=PROCTITLE msg=audit(27/10/2026 09:40:30.277:356) : proctitle=cat /etc/passwd
+type=PATH msg=audit(27/10/2026 09:40:30.277:356) : item=0 name=/etc/passwd inode=526045 dev=fc:00 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=NORMAL cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(27/10/2026 09:40:30.277:356) : cwd=/home/nina
+type=SYSCALL msg=audit(27/10/2026 09:40:30.277:356) : arch=x86_64 syscall=openat success=yes exit=3 a0=AT_FDCWD a1=0x7ffd72ca0940 a2=O_RDONLY|O_CLOEXEC a3=0x0 items=1 ppid=3377 pid=3378 auid=alice uid=bob gid=bob euid=bob suid=bob fsuid=bob egid=bob sgid=bob fsgid=bob tty=pts1 ses=3 comm=cat exe=/usr/lib/cargo/bin/coreutils/cat subj=unconfined key=passwd_watch

@@ -1,0 +1,4 @@
+---
+mariadb_role: master
+mariadb_server_id: 1
+mariadb_socket: /run/mysqld/mysqld.sock

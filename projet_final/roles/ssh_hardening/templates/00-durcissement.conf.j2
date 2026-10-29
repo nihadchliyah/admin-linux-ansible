@@ -1,0 +1,12 @@
+# Durcissement SSH - gere par Ansible (projet final)
+# Lu avant 50-cloud-init.conf : ces valeurs sont prioritaires
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitEmptyPasswords no
+AuthenticationMethods publickey
+AllowUsers {{ ssh_allowed_users | join(' ') }}
+MaxAuthTries {{ ssh_max_auth_tries }}
+LoginGraceTime 30
+X11Forwarding no

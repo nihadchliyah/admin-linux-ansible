@@ -1,0 +1,10 @@
+# Fichier gere par Ansible - replication MariaDB
+[mysqld]
+bind-address  = 0.0.0.0
+server-id     = {{ mariadb_server_id }}
+log_bin       = mysql-bin
+binlog_format = ROW
+{% if mariadb_role == 'replica' %}
+relay_log     = relay-bin
+read_only     = ON
+{% endif %}

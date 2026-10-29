@@ -1,0 +1,26 @@
+---
+- name: Deployer la configuration SSH durcie
+  ansible.builtin.template:
+    src: 00-durcissement.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-durcissement.conf
+    mode: "0644"
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Redemarrer SSH
+
+- name: Installer fail2ban
+  ansible.builtin.apt:
+    name: [fail2ban, python3-systemd]
+    state: present
+
+- name: Configurer fail2ban
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    mode: "0644"
+  notify: Redemarrer fail2ban
+
+- name: Demarrer et activer fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true

@@ -1,0 +1,39 @@
+# Regles d'alerte - projet final
+groups:
+  - name: alertes-serveurs
+    rules:
+      - alert: ServeurInjoignable
+        expr: up{job="serveurs"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Serveur injoignable : {{ $labels.instance }}"
+          description: "L'exporter ne repond plus depuis plus d'une minute."
+
+      - alert: MemoireElevee
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 80
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAM elevee sur {{ $labels.instance }}"
+          description: "La RAM utilisee depasse 80 % depuis plus d'une minute."
+
+      - alert: CPUEleve
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU eleve sur {{ $labels.instance }}"
+          description: "Le CPU depasse 90 % depuis plus de 5 minutes."
+
+      - alert: DisquePresquePlein
+        expr: (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disque presque plein sur {{ $labels.instance }}"
+          description: "La partition / est remplie a plus de 85 %."

@@ -1,0 +1,5 @@
+---
+# Ports TCP ouverts a tout le monde
+firewall_tcp_ports: [22, 80, 443]
+# Regles supplementaires (ex : acces reserve a une IP)
+firewall_extra_rules: []

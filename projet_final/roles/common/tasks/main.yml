@@ -1,0 +1,20 @@
+---
+- name: Regler le fuseau horaire
+  community.general.timezone:
+    name: "{{ fuseau_horaire }}"
+
+- name: Declarer les serveurs du projet dans /etc/hosts
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    marker: "# {mark} SERVEURS DU PROJET (gere par Ansible)"
+    block: |
+      {% for host in groups['all'] %}
+      {{ hostvars[host].ip_privee }} {{ host }}
+      {% endfor %}
+
+- name: Installer les outils de base
+  ansible.builtin.apt:
+    name: [curl, acl, nftables]
+    state: present
+    update_cache: true
+    cache_valid_time: 3600

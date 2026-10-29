@@ -1,0 +1,8 @@
+# Fichier gere par Ansible - replication MariaDB (TP3)
+[mysqld]
+bind-address  = 0.0.0.0
+server-id     = 2
+log_bin       = mysql-bin
+binlog_format = ROW
+relay_log     = relay-bin
+read_only     = ON

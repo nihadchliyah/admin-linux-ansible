@@ -1,0 +1,7 @@
+---
+# web1 et web2 : serveurs web et base de donnees
+ssh_allowed_users: [nina]
+fail2ban_ignoreip: "127.0.0.1/8 192.168.56.10"
+firewall_tcp_ports: [22]
+mariadb_master: web1
+mariadb_replica: web2

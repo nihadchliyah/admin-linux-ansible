@@ -1,0 +1,8 @@
+# Chargement automatique des tableaux de bord - TP5
+apiVersion: 1
+providers:
+  - name: TP5
+    folder: TP
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards

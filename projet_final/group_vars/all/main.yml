@@ -1,0 +1,7 @@
+---
+fuseau_horaire: Europe/Paris
+poste_admin_ip: 192.168.56.1
+
+# Les mots de passe sont dans vault.yml (chiffre avec ansible-vault)
+mariadb_repl_password: "{{ vault_mariadb_repl_password }}"
+mariadb_app_password: "{{ vault_mariadb_app_password }}"

@@ -1,0 +1,6 @@
+---
+mariadb_server_id: 2
+mariadb_role: replica
+firewall_extra_rules:
+  - "ip saddr 192.168.56.10 tcp dport { 80, 9100 } accept"
+  - "ip saddr 192.168.56.11 tcp dport 3306 accept"

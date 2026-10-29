@@ -1,0 +1,19 @@
+---
+- name: Installer nftables
+  ansible.builtin.apt:
+    name: nftables
+    state: present
+
+- name: Deployer les regles du pare-feu
+  ansible.builtin.template:
+    src: nftables.conf.j2
+    dest: /etc/nftables.conf
+    mode: "0644"
+    validate: nft -c -f %s
+  notify: Recharger nftables
+
+- name: Demarrer et activer nftables
+  ansible.builtin.service:
+    name: nftables
+    state: started
+    enabled: true

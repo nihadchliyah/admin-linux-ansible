@@ -1,0 +1,13 @@
+# Configuration fail2ban - gere par Ansible (projet final)
+[DEFAULT]
+bantime  = 10m
+findtime = 10m
+maxretry = 3
+backend  = systemd
+banaction = nftables-multiport
+ignoreip = {{ fail2ban_ignoreip }}
+
+[sshd]
+enabled = true
+port    = ssh
+journalmatch = _SYSTEMD_UNIT=ssh.service

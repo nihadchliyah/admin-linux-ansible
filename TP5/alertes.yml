@@ -1,0 +1,12 @@
+# Regles d'alerte - TP5
+groups:
+  - name: alertes-serveurs
+    rules:
+      - alert: MemoireElevee
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 80
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAM elevee sur {{ $labels.instance }}"
+          description: "La RAM utilisee depasse 80 % depuis plus d'une minute."
